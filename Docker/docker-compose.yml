@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  auv_ws:
+    container_name: auv_ws
+    image: ghcr.io/ufrj-nautilus/auv_ws:master
+    privileged: true
+    environment:
+      - DISPLAY=${DISPLAY} 
+    volumes:
+      - ./../../projeto_final/:/root/projeto_final
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /etc/localtime:/etc/localtime
+    network_mode: host
+    stdin_open: true
+    tty: true
