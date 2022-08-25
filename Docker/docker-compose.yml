@@ -9,6 +9,7 @@ services:
       - DISPLAY=${DISPLAY} 
     volumes:
       - ./../../projeto_final/:/root/projeto_final
+      - ./../../Processo-Seletivo-Nautilus/:/root/Processo-Seletivo-Nautilus
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /etc/localtime:/etc/localtime
     network_mode: host
