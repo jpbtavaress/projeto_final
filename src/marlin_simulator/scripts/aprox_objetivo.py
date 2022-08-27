@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from cmath import sqrt
 import rospy
-from geometry_msgs.msg import PointStamped, Twist, Point
-
+from geometry_msgs.msg import PointStamped, Twist
+from math import sqrt
 
 
 class ModularVelocidade():
@@ -34,13 +33,15 @@ class ModularVelocidade():
             else: 
                 velocidade_y = 0.0
                 
-            if distancia_y - distancia_x > 1:
+            if distancia_y - distancia_x > 0.5:
                 raio = sqrt(distancia_x**2+distancia_y**2) #decidir o angulo que vai virar
-                velocidade_angular = sqrt(velocidade_x**2 + velocidade_y**2)/raio
+                velocidade_angular = (sqrt(velocidade_x**2 + velocidade_y**2))/raio
             
-            if distancia_y - distancia_x < 1:
-                raio = sqrt(distancia_x**2+distancia_y**2) #decidir o angulo que vai virar
-                velocidade_angular = - sqrt(velocidade_x**2 + velocidade_y**2)/raio
+            if distancia_y - distancia_x < 0.5:
+                raio = sqrt((distancia_x**2)+(distancia_y**2)) #decidir o angulo que vai virar
+                velocidade_angular = - (sqrt((velocidade_x**2) + (velocidade_y**2)))/raio
+
+            print(type(velocidade_angular))
                 
             mover.linear.x = velocidade_x
             mover.linear.y = velocidade_y
