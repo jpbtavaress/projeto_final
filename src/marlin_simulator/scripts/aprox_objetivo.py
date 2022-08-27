@@ -17,25 +17,25 @@ class ModularVelocidade():
         
         distancia_x = posicao_relativa.point.x
         distancia_y =  posicao_relativa.point.y
-        distancia_z = posicao_relativa.point.z
+        distancia_z = posicao_relativa.point.z #vai ser sempre 0
         
         mover_lado = Float64()
         mover_frente = Float64()
         
-        if distancia_x > 2:
-            mover_lado.data = -3.0
+        if distancia_x >= 2:
+            mover_lado.data = distancia_x * distancia_x
 
-        elif  distancia_x < -2 :
-            mover_lado.data = 3.0
+        elif  distancia_x <= -2:
+            mover_lado.data = -(distancia_x * distancia_x)
         
-        else: 
+        elif (distancia_x >= -2) and (distancia_x <= 2):
             mover_lado.data = 0.0
 
-        if distancia_y > 2:
-            mover_frente.data = -3.0
+        if distancia_y >= 2:
+            mover_frente.data = distancia_y*distancia_y
 
-        elif distancia_y < -2:
-            mover_frente.data = 3.0
+        elif distancia_y <= -2:
+            mover_frente.data = -(distancia_y*distancia_y)
 
         else: 
             mover_frente.data = 0.0

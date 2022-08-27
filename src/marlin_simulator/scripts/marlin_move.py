@@ -8,15 +8,14 @@ import random
 class Movimento:
     def __init__(self):
         rospy.init_node('move', anonymous=True) #inicializa o nó, tem que ter no programa
-        self.v = Twist()
+        rospy.Subscriber('objetivo_X', Float64, self.callback1)
+        rospy.Subscriber('objetivo_Y', Float64, self.callback2)
         self.pub = rospy.Publisher('cmd_vel', Twist, queue_size = 10) #se inscreve em um tópico (o publisher publica em um tópico)
-        self.objetivo_x = rospy.Subscriber('objetivo_X', Float64, self.callback1)
-        self.objetivo_y = rospy.Subscriber('objetivo_Y', Float64, self.callback2)
-
-        
     
-    def callback1(self, velocidade):
-        self.v.linear.x = velocidade.data
+    def callback1(self,msg):
+        distancia_x = msg.data
+        velocidade = Twist()
+        velocidade_x = 
         self.cmd_vel()
 
     def callback2(self, velocidade):

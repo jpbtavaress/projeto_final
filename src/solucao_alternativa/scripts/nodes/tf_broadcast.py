@@ -44,5 +44,5 @@ if __name__ == '__main__':
     rate = rospy.Rate(100) #definir a velocidade das publicações
     astro = rospy.get_param ("policia_ladrao") #acessar o documento yaml que contém os parâmetros
     while not rospy.is_shutdown():
-    x = rospy.Time.now().to_sec() # pegar o tempo do ros
-    follow_nemo(astro["child"], astro["parent"], astro["distancia_child_to_parent"], x*astro["velocidade"])
+        x = rospy.Time.now().to_sec() # pegar o tempo do ros
+        follow_nemo(astro["child"], astro["parent"], astro["distancia_child_to_parent"], x*astro["velocidade"])
