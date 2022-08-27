@@ -23,9 +23,10 @@ def follow_nemo(child, parent, distancia_child_to_parent, tempo):
     br = tf2_ros.TransformBroadcaster() #instanciando para publicar (boradcast)
     t = geometry_msgs.msg.TransformStamped() #instanciando a mensgame que vai ser utilizada
     #prenchendo a mensagem
-    t.header.stamp = rospy.Time.now() 
+    t.header.stamp = rospy.Time.now()
     t.header.frame_id = child
     t.child_frame_id = parent
+    
 
     #instanciando as datas da msg
     t.transform.translation.x = distancia_child_to_parent * math.sin(tempo)
