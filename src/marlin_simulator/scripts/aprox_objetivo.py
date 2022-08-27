@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+from cmath import sqrt
 import rospy
-from geometry_msgs.msg import PointStamped, Point
+from geometry_msgs.msg import PointStamped, Twist, Point
+
 
 
 class ModularVelocidade():
@@ -9,7 +11,7 @@ class ModularVelocidade():
         self.tempo = 0.0
         rospy.init_node('mediar_orientacao', anonymous=True)
         rospy.Subscriber('sonar_data', PointStamped, self.callback)
-        self.velocidade = rospy.Publisher('objetivo', Point, queue_size=10)
+        self.velocidade = rospy.Publisher('objetivo', Twist, queue_size=10)
             
             
     def callback(self, posicao_relativa):
@@ -20,7 +22,7 @@ class ModularVelocidade():
             distancia_y =  posicao_relativa.point.y
             distancia_z = posicao_relativa.point.z #vai ser sempre 0
             
-            mover = Point()
+            mover = Twist()
             
             if distancia_x >= 1.5 or distancia_x <= -1.5:
                 velocidade_x = -distancia_x/tempo2
@@ -31,10 +33,21 @@ class ModularVelocidade():
                 velocidade_y = -distancia_y/tempo2
             else: 
                 velocidade_y = 0.0
+                
+            if distancia_y - distancia_x > 1:
+                raio = sqrt(distancia_x**2+distancia_y**2) #decidir o angulo que vai virar
+                velocidade_angular = sqrt(velocidade_x**2 + velocidade_y**2)/raio
             
-            mover.x = velocidade_x
-            mover.y = velocidade_y
-            mover.z = 0.0
+            if distancia_y - distancia_x < 1:
+                raio = sqrt(distancia_x**2+distancia_y**2) #decidir o angulo que vai virar
+                velocidade_angular = - sqrt(velocidade_x**2 + velocidade_y**2)/raio
+                
+            mover.linear.x = velocidade_x
+            mover.linear.y = velocidade_y
+            mover.linear.z = 0.0
+            mover.angular.x = 0
+            mover.angular.y = 0
+            mover.angular.z = velocidade_angular
             print(mover)
             
             self.velocidade.publish(mover)
