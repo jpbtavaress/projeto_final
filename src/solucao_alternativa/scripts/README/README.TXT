@@ -1,0 +1,2 @@
+#Funcionamento do código
+
