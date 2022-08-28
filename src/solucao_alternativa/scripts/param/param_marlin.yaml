@@ -1,0 +1,6 @@
+"policia_ladrao": [
+     {"child": "marlin",
+     "distancia_child_to_parent": 1,
+      "parent": "nemo",
+      "velocidade": 1
+]
