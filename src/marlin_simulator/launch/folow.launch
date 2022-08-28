@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node name='aprox_objetivo' pkg="marlin_simulator" type='aprox_objetivo.py'/>
+    <node name='marlin_move' pkg="marlin_simulator" type='marlin_move.py'/>
+</launch>

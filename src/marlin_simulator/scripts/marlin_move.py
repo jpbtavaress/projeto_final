@@ -1,41 +1,71 @@
 #!/usr/bin/env python3
 
 import rospy
-from geometry_msgs.msg import Twist #importando o tipo de mensagem que será utilizado
+from geometry_msgs.msg import PointStamped, Twist
+from math import sqrt
+from std_msgs.msg import Float64
 
 
-class Movimento:
+class Movement():
     def __init__(self):
-        rospy.init_node('move', anonymous=True) #inicializa o nó, tem que ter no programa
-        rospy.Subscriber('objetivo', Twist, self.callback)
-        self.pub = rospy.Publisher('cmd_vel', Twist, queue_size = 10) #se inscreve em um tópico (o publisher publica em um tópico)
-    
-    def callback(self,msg):
-        rate = rospy.Rate(100)
-        
-        x_linear, y_linear, z_linear, x_angular, y_angular, z_angular = msg.linear.x, msg.linear.y, msg.linear.z, msg.angular.x, msg.angular.y, msg.angular.z
-  
-        
-        v = Twist()
-        v.linear.x = x_linear #Declarando as variáveis de velocidade 
-        v.linear.y = y_linear
-        v.linear.z = z_linear
-        v.angular.x = x_angular
-        v.angular.y = y_angular
-        v.angular.z = z_angular
-        self.pub.publish(v)
-        
-        rospy.loginfo(v)
-        rate.sleep()
-        
-    
+        self.tempo = 0.0
+        self.velocidade_angular = 0.0
+        self.velocidade = 0.0
 
-if __name__ == '__main__':
-    try:
-    
-        t = Movimento()
-        rospy.spin()
+        rospy.Subscriber('diferenca_angular', Float64, self.girar)
+        rospy.Subscriber('sonar_data', PointStamped, self.acelerar)
+        
+        self.pub = rospy.Publisher('cmd_vel', Twist, queue_size = 10) 
+            
+    def girar(self, diferenca_angular):
+        
+        if not abs(diferenca_angular.data) < 0.1:
+            self.velocidade_angular = 6.0
+        # elif not abs(diferenca_angular.data) > 6  :
+        #     self.velocidade_angular = -6.0
+        else:
+            self.velocidade_angular = 0.0
+
+        mover = Twist()
+        mover.linear.x = 0.0
+        mover.linear.y = self.velocidade
+        mover.linear.z = 0.0
+        mover.angular.x = 0.0
+        mover.angular.y = 0.0
+        mover.angular.z = self.velocidade_angular
+        rospy.loginfo(mover)
+        rospy.loginfo(diferenca_angular.data)
+
+        self.pub.publish(mover)
+        
+
+    def acelerar(self, posicao_relativa):
+            
+            intervalo = rospy.Time.now().to_sec() - self.tempo   
+            self.tempo = rospy.Time.now().to_sec()
+
+            distancia_x = posicao_relativa.point.x
+            distancia_y =  posicao_relativa.point.y
+            distancia_z = posicao_relativa.point.z 
+            
+            if distancia_x >= 2.5 or distancia_x <= -2.5:
+                velocidade_x = -distancia_x/intervalo 
+            else:
+                velocidade_x = 0.0
+
+            if distancia_y >= 2.5 or distancia_y <= -2.5:
+                velocidade_y = -distancia_y/intervalo
+            else: 
+                velocidade_y = 0.0
+
+             
+            self.velocidade = sqrt(velocidade_x**2+velocidade_y**2) 
 
             
-    except rospy.ROSInterruptException:
-        pass
+
+
+if __name__ == '__main__':
+    rospy.init_node('mediar_velocidade', anonymous=True)
+    l = Movement()
+    rospy.spin()
+    

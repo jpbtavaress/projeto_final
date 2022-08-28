@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <rosparam command="load" file="$find(find solucao_alternativa)/param/param_marlin.yaml"/>
-    <node name="perseguicao" pkg="solucao_alternativa" type="tf_broadcast.py">
-    </node>
-</launch>
