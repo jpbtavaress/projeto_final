@@ -19,10 +19,10 @@ class Movement():
             
     def girar(self, diferenca_angular):
         
-        if not abs(diferenca_angular.data) < 0.1:
+        if  abs(diferenca_angular.data) < 6 and abs(diferenca_angular.data) >= 3.0 or diferenca_angular.data < 0:
             self.velocidade_angular = 6.0
-        # elif not abs(diferenca_angular.data) > 6  :
-        #     self.velocidade_angular = -6.0
+        elif (abs(diferenca_angular.data) < 3 and abs(diferenca_angular.data) >  0.1):
+            self.velocidade_angular = -6.0
         else:
             self.velocidade_angular = 0.0
 
